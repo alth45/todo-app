@@ -33,6 +33,13 @@ app.get('/todos', (req, res) => {
   res.json({ data: todos, total: todos.length })
 })
 
+app.get('/todos/filter', (req, res) => {
+  const { done } = req.query
+  if (done === undefined) return res.json({ data: todos })
+  const filtered = todos.filter(t => t.done === (done === 'true'))
+  res.json({ data: filtered, total: filtered.length })
+})
+
 // GET /todos/:id - ambil by id
 app.get('/todos/:id', (req, res) => {
   const todo = todos.find(t => t.id === parseInt(req.params.id))
@@ -66,12 +73,7 @@ app.delete('/todos/:id', (req, res) => {
   const deleted = todos.splice(index, 1)[0]
   res.json({ message: 'Todo berhasil dihapus', data: deleted })
 })
-app.get('/todos/filter', (req, res) => {
-  const { done } = req.query
-  if (done === undefined) return res.json({ data: todos })
-  const filtered = todos.filter(t => t.done === (done === 'true'))
-  res.json({ data: filtered, total: filtered.length })
-})
+
 // Start server
 app.listen(PORT, () => {
   console.log(`Server jalan di http://localhost:${PORT}`)
